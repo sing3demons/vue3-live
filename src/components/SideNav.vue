@@ -25,10 +25,10 @@
             </div>
             สินค้า
           </router-link>
-          <a class="nav-link" href="tables.html">
+          <router-link class="nav-link" to="/category">
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-            Tables
-          </a>
+            ประเภทสินค้า
+          </router-link>
         </div>
       </div>
       <div class="sb-sidenav-footer">

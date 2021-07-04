@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import DashBoard from "../Layouts/DashBoard.vue";
 import Product from "../views/Product.vue";
 
+import categoryRoutes from "../views/category/category-route";
+
 const routes = [
   {
     path: "/",
@@ -24,7 +26,7 @@ const routes = [
         path: "product",
         name: "Product",
         component: Product,
-      },
+      },  ...categoryRoutes,
     ],
   },
 
@@ -34,6 +36,7 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/Login.vue"),
   },
+
 ];
 
 const router = createRouter({
