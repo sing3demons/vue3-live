@@ -48,6 +48,16 @@
           </tbody>
         </table>
       </div>
+      <br />
+      <div v-if="categories.length > 0">
+        <v-pagination
+          v-model="page"
+          :pages="total"
+          :range-size="1"
+          active-color="#DCEDFF"
+          @update:modelValue="updateHandler"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -57,14 +67,20 @@ import axios from "axios";
 import { BASE_API_URL } from "../../constants/index";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import VPagination from "@hennge/vue3-pagination";
 
 export default {
   name: "CategoryIndex",
+  components: {
+    VPagination,
+  },
   setup() {
     const categories = ref([]);
     const errorMessage = ref("");
     const loading = ref(false);
     const router = useRouter();
+    const page = ref(1);
+    const total = ref(10);
 
     const deleteCategory = async (id) => {
       const isConfirm = window.confirm("ลบหรือไม่");
@@ -74,13 +90,14 @@ export default {
       }
     };
 
-    const fetchData = async () => {
+    const fetchData = async (page) => {
       try {
         loading.value = true;
-        let url = `${BASE_API_URL}/api/category?size=${5}`;
+        let url = `${BASE_API_URL}/api/category?page=${page}&page_size=24`;
         const { data } = await axios.get(url);
-
-        categories.value = data;
+        categories.value = data.data;
+        total.value = data.last_page;
+        console.log(total.value);
       } catch (error) {
         console.log(error);
         loading.value = true;
@@ -91,10 +108,18 @@ export default {
     };
 
     onMounted(() => {
-      fetchData();
+      fetchData(page.value);
     });
 
-    return { categories, errorMessage, loading, deleteCategory };
+    return {
+      categories,
+      errorMessage,
+      loading,
+      deleteCategory,
+      page,
+      total,
+      fetchData,
+    };
   },
 };
 </script>
