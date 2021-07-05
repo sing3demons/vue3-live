@@ -1,6 +1,6 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="about px-3">
+    <h1 class="d-flex justify-content-center">This is an about page</h1>
     <p>{{ email }}</p>
     <a :href="url">Google</a>
     <br />

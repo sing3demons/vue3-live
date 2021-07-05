@@ -55,7 +55,7 @@
           :pages="total"
           :range-size="1"
           active-color="#DCEDFF"
-          @update:modelValue="updateHandler"
+          @update:modelValue="fetchData"
         />
       </div>
     </div>
