@@ -12,22 +12,24 @@ const mutations = {
   },
 };
 
+const actions = {
+  async getProfile({ commit }) {
+    const token = JSON.parse(localStorage.getItem("token"));
+    if (!token) return;
+    
+    const { data } = await axios.get(`${BASE_API_URL}/api/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const newProfile = JSON.parse(JSON.stringify(data?.data?.user));
+
+    commit("SET_USER_PROFILE", newProfile);
+  },
+};
+
 export default createStore({
   state,
   mutations,
-  actions: {
-    async getProfile({ commit }) {
-      const token = JSON.parse(localStorage.getItem("token"));
-
-      const { data } = await axios.get(`${BASE_API_URL}/api/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-  
-      const newProfile = JSON.parse(JSON.stringify(data?.data?.user));
-     
-      commit("SET_USER_PROFILE", newProfile);
-    },
-  },
+  actions,
   modules: {},
 });

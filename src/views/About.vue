@@ -8,6 +8,26 @@
     <br />
     <button class="btn-btn-info" @click="greet">Click Me!</button>
   </div>
+
+  <div class="mt-5">
+    <div class="row px-5">
+      <form @submit.prevent="onSubmit()" enctype="multipart/form=data">
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label"
+            >upload file</label
+          >
+          <input
+            type="file"
+            class="form-control mb-4"
+            name="picture"
+            ref="file"
+          />
+
+          <button type="submit" class="btn btn-primary">save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 <script>
 import { ref, reactive, onMounted, onUpdated, onUnmounted } from "vue";
@@ -23,6 +43,18 @@ export default {
       atl: "image",
     });
     const isShow = ref(false);
+    const file = ref(null);
+
+    const onSubmit = () => {
+      const fileUpload = file.value.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(fileUpload);
+      reader.onload = (e) => {
+        const base64Image = e.target.result;
+        console.log(base64Image);
+        //ให้ส่ง base64Image ไปอัปโหลดที่ server โดยใช้ axios
+      };
+    };
 
     onMounted(() => {
       console.log("mounted!");
@@ -38,7 +70,7 @@ export default {
       isShow.value = !isShow.value;
     };
 
-    return { email, url, imgUrl, isShow, greet };
+    return { email, url, imgUrl, isShow, greet, onSubmit, file };
   },
 };
 </script>
