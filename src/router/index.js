@@ -38,6 +38,10 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/Login.vue"),
   },
+  // {
+  //   path: "*",
+  //   redirect: "/login",
+  // },
 ];
 
 const router = createRouter({

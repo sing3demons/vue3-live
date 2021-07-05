@@ -1,7 +1,9 @@
 <template>
   <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
-    <router-link class="navbar-brand ps-3" to="/">Start Bootstrap</router-link>
+    <router-link v-if="profile" class="navbar-brand ps-3" to="/">{{
+      profile?.name
+    }}</router-link>
     <!-- Sidebar Toggle-->
     <button
       class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
@@ -64,16 +66,20 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 export default {
   name: "Navbar",
   setup() {
     const router = useRouter();
+    const { state } = useStore();
+    const profile = computed(() => state.profile);
     const logout = () => {
       localStorage.removeItem("token");
       router.replace("/login");
     };
-    return { logout };
+    return { logout, profile };
   },
 };
 </script>

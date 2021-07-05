@@ -93,6 +93,7 @@ import { BASE_API_URL } from "../constants/index";
 import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "Login",
@@ -100,6 +101,9 @@ export default {
     const router = useRouter();
     const email = ref("");
     const password = ref("");
+    const { dispatch } = useStore();
+
+ 
 
     const onSubmit = async () => {
       try {
@@ -107,15 +111,12 @@ export default {
           email: email.value,
           password: password.value,
         });
-        console.log(data.access_token);
+        // console.log(data.access_token);
         localStorage.setItem("token", JSON.stringify(data.access_token));
 
-        // const token = JSON.parse(localStorage.getItem("token"));
+        //call actions = store.dispatch
+        dispatch("getProfile");
 
-        // const resp = await axios.get(`${BASE_API_URL}/api/profile`, {
-        //   access_token: `bearer ${token}`,
-        // });
-        // console.log(resp.data);
         router.push("/");
       } catch (error) {
         console.log(error);

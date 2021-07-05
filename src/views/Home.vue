@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid px-4">
-    <h1 class="mt-4">Dashboard</h1>
+    <h1 v-if="profile" class="mt-4">ยินดีต้อนรับ คุณ {{ profile?.name }}</h1>
     <ol class="breadcrumb mb-4">
       <li class="breadcrumb-item active">Dashboard</li>
     </ol>
@@ -82,10 +82,17 @@
 </template>
 
 <script>
+import { computed } from "vue";
+import { useStore } from "vuex";
 // @ is an alias to /src
 
 export default {
   name: "Home",
   components: {},
+  setup: () => {
+    const { state } = useStore();
+    const profile = computed(() => state.profile);
+    return { profile };
+  },
 };
 </script>
