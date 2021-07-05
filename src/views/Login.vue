@@ -10,12 +10,13 @@
                   <h3 class="text-center font-weight-light my-4">Login</h3>
                 </div>
                 <div class="card-body">
-                  <form>
+                  <form @submit.prevent="onSubmit">
                     <div class="form-floating mb-3">
                       <input
                         class="form-control"
-                        id="inputEmail"
+                        id="email"
                         type="email"
+                        v-model="email"
                         placeholder="name@example.com"
                       />
                       <label for="inputEmail">Email address</label>
@@ -23,8 +24,9 @@
                     <div class="form-floating mb-3">
                       <input
                         class="form-control"
-                        id="inputPassword"
+                        id="password"
                         type="password"
+                        v-model="password"
                         placeholder="Password"
                       />
                       <label for="inputPassword">Password</label>
@@ -52,7 +54,9 @@
                       "
                     >
                       <a class="small" href="password.html">Forgot Password?</a>
-                      <a class="btn btn-primary" href="index.html">Login</a>
+                      <button type="submit" class="btn btn-primary">
+                        Login
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -85,8 +89,40 @@
 </template>
 
 <script>
+import { BASE_API_URL } from "../constants/index";
+import axios from "axios";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
 export default {
   name: "Login",
+  setup: () => {
+    const router = useRouter();
+    const email = ref("");
+    const password = ref("");
+
+    const onSubmit = async () => {
+      try {
+        const { data } = await axios.post(`${BASE_API_URL}/api/login`, {
+          email: email.value,
+          password: password.value,
+        });
+        console.log(data.access_token);
+        localStorage.setItem("token", JSON.stringify(data.access_token));
+
+        // const token = JSON.parse(localStorage.getItem("token"));
+
+        // const resp = await axios.get(`${BASE_API_URL}/api/profile`, {
+        //   access_token: `bearer ${token}`,
+        // });
+        // console.log(resp.data);
+        router.push("/");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return { onSubmit, email, password };
+  },
 };
 </script>
 

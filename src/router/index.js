@@ -11,6 +11,7 @@ const routes = [
     path: "/",
     name: "DashBoard",
     component: DashBoard,
+    meta: { requireAuth: true },
     children: [
       {
         path: "",
@@ -26,7 +27,8 @@ const routes = [
         path: "product",
         name: "Product",
         component: Product,
-      },  ...categoryRoutes,
+      },
+      ...categoryRoutes,
     ],
   },
 
@@ -36,13 +38,21 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/Login.vue"),
   },
-
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
   linkExactActiveClass: "active",
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requireAuth)) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      next("/login");
+    } else next();
+  } else next();
 });
 
 export default router;

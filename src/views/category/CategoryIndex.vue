@@ -63,11 +63,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import { BASE_API_URL } from "../../constants/index";
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import VPagination from "@hennge/vue3-pagination";
+import { useIndex } from "./use/crud-category";
 
 export default {
   name: "CategoryIndex",
@@ -75,49 +72,23 @@ export default {
     VPagination,
   },
   setup() {
-    const categories = ref([]);
-    const errorMessage = ref("");
-    const loading = ref(false);
-    const router = useRouter();
-    const page = ref(1);
-    const total = ref(10);
-
-    const deleteCategory = async (id) => {
-      const isConfirm = window.confirm("ลบหรือไม่");
-      if (isConfirm === true) {
-        await axios.delete(`${BASE_API_URL}/api/category/${id}`);
-        router.go(0);
-      }
-    };
-
-    const fetchData = async (page) => {
-      try {
-        loading.value = true;
-        let url = `${BASE_API_URL}/api/category?page=${page}&page_size=24`;
-        const { data } = await axios.get(url);
-        categories.value = data.data;
-        total.value = data.last_page;
-        console.log(total.value);
-      } catch (error) {
-        console.log(error);
-        loading.value = true;
-        errorMessage.value = "เกิดข้อผิดพลาด";
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    onMounted(() => {
-      fetchData(page.value);
-    });
-
-    return {
+    const {
       categories,
       errorMessage,
       loading,
       deleteCategory,
       page,
       total,
+      fetchData,
+    } = useIndex();
+
+    return {
+      categories,
+      errorMessage,
+      loading,
+      page,
+      total,
+      deleteCategory,
       fetchData,
     };
   },
